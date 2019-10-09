@@ -11,10 +11,10 @@ import {connect} from "react-redux";
 
 const mapStateToProps = state => {
     return {
-        dishes: state.dishes,
-        comments: state.comments,
-        promotions: state.promotions,
-        leaders: state.leaders
+        dishes: state.Dishes,
+        comments: state.Comments,
+        promotions: state.Promotions,
+        leaders: state.Leaders
     };
 };
 
