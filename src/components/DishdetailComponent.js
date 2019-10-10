@@ -1,5 +1,5 @@
 import React from "react";
-import {Card, CardImg, CardTitle, CardText, CardBody, Breadcrumb, BreadcrumbItem} from "reactstrap";
+import {Card, CardImg, CardTitle, CardText, CardBody, Breadcrumb, BreadcrumbItem, Button} from "reactstrap";
 import {Link} from "react-router-dom";
 
 const Comments = ({comments}) => {
@@ -21,7 +21,7 @@ const Dish = ({dish}) => (
     </Card>
 );
 
-const Dishdetail = ({dish, comments}) => {
+const Dishdetail = ({dish, comments,toggleModal }) => {
     let disDetail = <div></div>;
     if(dish != null){
         disDetail = (
@@ -36,6 +36,7 @@ const Dishdetail = ({dish, comments}) => {
                 </div>
                 <div className="col-12 col-md-5 m-1">
                     <Comments comments={comments}/>
+                    <Button onClick={() => toggleModal(dish.id)} ><span className="fa fa-sign-in fa-lg"></span> Add Comment</Button>
                 </div>            
             </div>
             </div>

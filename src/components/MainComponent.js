@@ -8,6 +8,8 @@ import Home from "./HomeComponent";
 import Contact from "./ContactComponent";
 import {Switch, Route, Redirect, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
+import {Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label} from "reactstrap";
+import {addComment} from "../redux/ActionCreators";
 
 const mapStateToProps = state => {
     return {
@@ -18,19 +20,45 @@ const mapStateToProps = state => {
     };
 };
 
+const mapDispatchToProps = dispatch => ({
+    addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+});
 
 class Main extends Component {
 
     constructor(props){
         super(props);
+        this.state = {
+            isModalOpen: false,
+            dishId: 0
+        };
+        this.toggleModal = this.toggleModal.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
+        this.rating = React.createRef;
+        this.name = React.createRef;
+        this.comment = React.createRef;
     }
 
+
+    toggleModal(dishId){
+        this.setState(prev => {
+            return { isModalOpen: !prev.isModalOpen, dishId: dishId };
+        });
+    }
+
+    handleLogin(event){
+        this.toggleModal();
+        event.preventDefault();
+        this.props.addComment(this.state.dishId, this.rating.value, this.name.value, this.comment.value);
+    }
+    
     render() {
 
         const DishWithId = ({match}) => {
             return (
                 <Dishdetail dish={this.props.dishes.filter(dish => dish.id === parseInt(match.params.dishId, 10))[0]} 
-                            comments={this.props.comments.filter(comment => comment.id === parseInt(match.params.dishId, 10))}/>
+                            comments={this.props.comments.filter(comment => comment.dishId === parseInt(match.params.dishId, 10))}
+                            addComment={this.props.addComment} toggleModal={this.toggleModal}/>
             );
         }
 
@@ -50,10 +78,29 @@ class Main extends Component {
                         <Route path="/contactus" component={() => <Contact/>}/>
                         <Redirect to="/home"/>
                     </Switch>
-                <Footer/>
+                    <Modal isOpen={this.state.isModalOpen}>
+                        <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
+                        <ModalBody>
+                        <Form onSubmit={this.handleLogin}>
+                                <FormGroup>
+                                    <Label htmlFor="username">rating</Label>
+                                    <Input type="text" id="rating" name="rating"
+                                        innerRef={(input) => this.rating = input} />
+                                    <Label htmlFor="username">Username</Label>
+                                    <Input type="text" id="name" name="name"
+                                        innerRef={(input) => this.name = input} />
+                                    <Label htmlFor="username">comment</Label> 
+                                    <Input type="text" id="comment" name="comment"
+                                        innerRef={(input) => this.comment = input} />
+                                </FormGroup>
+                                <Button type="submit" value="submit" color="primary">Login</Button>
+                            </Form>
+                        </ModalBody>
+                    </Modal>
+                <Header/>
             </div>
         );
     }
 }
 
-export default withRouter(connect(mapStateToProps)(Main));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
