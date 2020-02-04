@@ -1,6 +1,7 @@
 import React from "react";
 import {Card, CardImg, CardTitle, CardText, CardBody, Breadcrumb, BreadcrumbItem, Button} from "reactstrap";
 import {Link} from "react-router-dom";
+import { Loading } from './LoadingComponent';
 
 const Comments = ({comments}) => {
     return (<ul>
@@ -21,9 +22,27 @@ const Dish = ({dish}) => (
     </Card>
 );
 
-const Dishdetail = ({dish, comments,toggleModal }) => {
+const Dishdetail = ({dish, comments,toggleModal, isLoading, errMess }) => {
     let disDetail = <div></div>;
-    if(dish != null){
+
+    if (isLoading) {
+        return(
+            <div className="container">
+                <div className="row">            
+                    <Loading />
+                </div>
+            </div>
+        );
+    }
+    else if (errMess) {
+        return(
+            <div className="container">
+                <div className="row">            
+                    <h4>{errMess}</h4>
+                </div>
+            </div>
+        );
+    } else if(dish != null){
         disDetail = (
             <div className="container">
                 <div className="row">

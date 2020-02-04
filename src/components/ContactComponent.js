@@ -14,6 +14,7 @@ class Contact extends Component {
 
     addleSubmit(values){
         alert('Current State is: ' + JSON.stringify(values));
+        this.props.resetFeedbackForm();
     }
 
     render(){
@@ -34,7 +35,7 @@ class Contact extends Component {
                             <h3>Your Feedback</h3>
                         </div>
                         <div className="col-12 col-md-9">
-                            <LocalForm onSubmit={values => this.addleSubmit(values)}>
+                            <LocalForm model="feedback"  onSubmit={values => this.addleSubmit(values)}>
                                 <Row className="form-group">
                                     <Label htmlFor="firstname" md={2}>First Name</Label>
                                     <Col md={10}>
